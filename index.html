@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+    <html lang="zh-CN">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>我的个人品牌网站</title>
+        <!-- 加载 React 库 -->
+        <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+        <!-- 加载 Babel (用于解析 JSX) -->
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <!-- 引入 Tailwind CSS (无需安装，直接使用 CDN) -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            /* 使用 Inter 字体以获得现代外观 */
+            body { font-family: 'Inter', sans-serif; }
+        </style>
+      </head>
+      <body>
+        <!-- 这是 React 应用挂载的地方 -->
+        <div id="root"></div>
+        <!-- 导入您的 React 应用代码 -->
+        <script type="text/babel" src="./App.jsx"></script>
+        
+        <script type="text/babel">
+          // React 启动代码
+          const container = document.getElementById('root');
+          const root = ReactDOM.createRoot(container);
+          // App 必须是您文件中的主要导出组件名称
+          root.render(<App />); 
+        </script>
+      </body>
+    </html>
