@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
 import { 
@@ -135,7 +134,7 @@ export default function App() {
         {activeTab === 'posts' && <PostsModule user={user} />}
         {activeTab === 'knowledge' && <KnowledgeModule user={user} />}
         {activeTab === 'about' && <AboutModule user={user} />}
-        {activeTab === 'project' && <ProjectsModule user={user} />} {/* 更改为 ProjectsModule */}
+        {activeTab === 'project' && <ProjectsModule user={user} />}
       </main>
       
       <footer className="text-center text-gray-400 py-8 text-sm border-t mt-12">
