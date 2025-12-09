@@ -21,31 +21,49 @@ function App() {
   const [activeTab, setActiveTab] = useState('posts');
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
+  const [initError, setInitError] = useState(null);
 
   // 初始化 Firebase
   useEffect(() => {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    auth = firebase.auth();
-    db = firebase.firestore();
-
-    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
-      if (!currentUser) {
-        await auth.signInAnonymously();
-      } else {
-        setUser(currentUser);
-        setUserId(currentUser.uid);
-        setCanEdit(!currentUser.isAnonymous);
+    try {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
       }
-      setLoading(false);
-    });
+      auth = firebase.auth();
+      db = firebase.firestore();
 
-    return () => unsubscribe();
+      const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+        if (!currentUser) {
+          try {
+            await auth.signInAnonymously();
+          } catch (error) {
+            console.error("匿名登录失败:", error);
+            setInitError("初始化失败，请检查Firebase配置");
+            setLoading(false);
+            return;
+          }
+        } else {
+          setUser(currentUser);
+          setUserId(currentUser.uid);
+          setCanEdit(!currentUser.isAnonymous);
+        }
+        setLoading(false);
+      });
+
+      return () => unsubscribe();
+    } catch (error) {
+      console.error("Firebase初始化失败:", error);
+      setInitError("Firebase配置错误，请检查配置信息");
+      setLoading(false);
+    }
   }, []);
 
   if (loading) {
     return <div className="flex items-center justify-center h-screen text-gray-500">正在初始化...</div>;
+  }
+
+  if (initError) {
+    return <div className="flex items-center justify-center h-screen text-red-500">{initError}</div>;
   }
 
   // 渲染不同模块
@@ -824,16 +842,3 @@ function ProjectsModule({ canEdit, db, userId }) {
                       title="删除"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-    </div>
-  );
-}
